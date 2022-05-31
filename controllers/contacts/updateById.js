@@ -1,9 +1,11 @@
 const { NotFound } = require("http-errors");
-const updateContact = require("../../models/contacts/updateContact");
+const { Contact } = require("../../models");
 
-const updateById = async (req, res, next) => {
+const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await updateContact(contactId, req.body);
+  const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!contact) {
     throw new NotFound(`Contact with ${contactId} not found`);
   }
